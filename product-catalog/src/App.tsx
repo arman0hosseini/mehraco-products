@@ -1,4 +1,12 @@
+import { useProducts } from "@/features/products/hooks";
+
 export default function App() {
+  const { data, isLoading, error } = useProducts({
+    page: 1,
+    limit: 12,
+    search: "",
+  });
+
   return (
     <div className="min-h-screen bg-gray-50 text-gray-900">
       <header className="border-b bg-white">
@@ -8,11 +16,25 @@ export default function App() {
       </header>
 
       <main className="mx-auto max-w-6xl px-4 py-6">
-        {/* Phase 3 will replace this with the actual Product List page */}
         <div className="rounded-xl border bg-white p-6">
-          <p className="text-sm text-gray-600">
-            Setup complete. Next: build API layer + product list UI.
-          </p>
+          {isLoading && <p>Loading…</p>}
+          {error && <p className="text-red-600">Error: {error.message}</p>}
+
+          {data && (
+            <>
+              <p className="text-sm text-gray-600">
+                Total: {data.total} — Showing: {data.products.length}
+              </p>
+
+              <ul className="mt-4 list-disc pl-6">
+                {data.products.slice(0, 5).map((p) => (
+                  <li key={p.id}>
+                    {p.title} — ${p.price}
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </div>
       </main>
     </div>
