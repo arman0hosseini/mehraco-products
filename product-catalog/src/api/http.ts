@@ -28,6 +28,7 @@ export async function httpGet<T>(
       `HTTP ${res.status} ${res.statusText}${text ? ` - ${text}` : ""}`,
     );
   }
-
-  return (await res.json()) as T;
+  const result = (await res.json()) as T;
+  // console.log(result);
+  return result;
 }

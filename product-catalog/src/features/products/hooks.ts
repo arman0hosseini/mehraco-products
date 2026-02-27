@@ -11,9 +11,7 @@ type UseProductsArgs = {
 export function useProducts({ page, limit, search }: UseProductsArgs) {
   const skip = (page - 1) * limit;
 
-  // Query keys must include every variable that changes the result
-  // so caching behaves correctly. :contentReference[oaicite:5]{index=5}
-  return useQuery<ProductsResponse, Error>({
+  const result = useQuery<ProductsResponse, Error>({
     queryKey: [" ", { page, limit, search: search ?? "" }],
     queryFn: () =>
       fetchProducts({
@@ -23,6 +21,9 @@ export function useProducts({ page, limit, search }: UseProductsArgs) {
       }),
     placeholderData: (previousData) => previousData, // smoother pagination UX
   });
+
+  // console.log(result);
+  return result;
 }
 
 export function useCategories() {
